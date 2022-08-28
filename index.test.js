@@ -67,4 +67,30 @@ describe('markdown-it-class', () => {
       '<h1 class="title is-4 is-black">Hello</h1>\n<h2 class="subtitle is-dark is-6">World</h2>'
     );
   });
+
+  it('adds classes to code spans', () => {
+    const md = new MarkdownIt();
+    md.use(MarkdownItClass, {
+      code: 'tag',
+    });
+
+    expect(
+      md.render('# There are three languages, `python` `JavaScript` and `C`.').trim()
+    ).toBe(
+      '<h1>There are three languages, <code class="tag">python</code> <code class="tag">JavaScript</code> and <code class="tag">C</code>.</h1>'
+    );
+  });
+
+  it('adds classes to code blocks', () => {
+    const md = new MarkdownIt();
+    md.use(MarkdownItClass, {
+      code: 'tag',
+    });
+
+    expect(
+      md.render("# Hello World Example, ```javascript console.log('Hello World'); ```.").trim()
+    ).toBe(
+      '<h1>Hello World Example, <code class="tag">javascript console.log(\'Hello World\');</code>.</h1>'
+    );
+  });
 });
