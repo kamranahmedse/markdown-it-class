@@ -35,7 +35,7 @@ console.log(html);
 
 ## Credits
 
-This package is a fork of [markdown-it-class](https://github.com/HiroshiOkada/markdown-it-class) with updated dependencies and the support for all sorts of HTML tags. 
+This package is a fork of [markdown-it-class](https://github.com/HiroshiOkada/markdown-it-class) which has outdated dependencies and has [improper handling for HTML tags](https://github.com/HiroshiOkada/markdown-it-class/blob/master/index.js#L11) because it relies on the [undocumented token types](https://github.com/markdown-it/markdown-it/issues/822) which [misses out](https://github.com/HiroshiOkada/markdown-it-class/pull/1) [an unknown number](https://github.com/HiroshiOkada/markdown-it-class/pull/3) token types. Current package has up-to-date dependencies and supports all the html types by relying on the [documented nesting property of tokens](https://markdown-it.github.io/markdown-it/#Token.prototype.nesting). 
 
 ## Contributions
 
