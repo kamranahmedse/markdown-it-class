@@ -35,7 +35,7 @@ console.log(html);
 
 ## Credits
 
-This package is a fork of [HiroshiOkada/markdown-it-class](https://github.com/HiroshiOkada/markdown-it-class) with the support for additional tags and updated dependencies.
+This package is a fork of [HiroshiOkada/markdown-it-class](https://github.com/HiroshiOkada/markdown-it-class) with the support for all sorts of HTML tags. The original package has the invalid conditional logic for assigning classes due to which it misses several HTML tags. 
 
 ## Contributions
 
