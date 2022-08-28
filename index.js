@@ -1,32 +1,33 @@
-'use strict'
-
-let mapping = {}
-
-const splitWithSpace = s => (s ? s.split(' ') : [])
-
-const toArray = a => (Array.isArray(a) ? a : [a])
-
-function parseTokens(tokens) {
-  tokens.forEach(token => {
+/**
+ * Takes the markdown-it tokens and assigns classes to each token
+ *
+ * @param tokens
+ * @param mapping
+ */
+function setTokenClasses(tokens, mapping = {}) {
+  tokens.forEach((token) => {
     if (/(_open$|image)/.test(token.type) && mapping[token.tag]) {
-      const orig = splitWithSpace(token.attrGet('class'))
-      const addition = toArray(mapping[token.tag])
-      token.attrSet('class', [...orig, ...addition].join(' '))
+      const existingClassAtr = token.attrGet('class') || '';
+
+      const existingClasses = existingClassAtr.split(' ');
+      const givenClasses = mapping[token.tag] || '';
+
+      const newClasses = [
+        ...existingClasses,
+        ...(Array.isArray(givenClasses) ? givenClasses : [givenClasses]),
+      ];
+
+      token.attrSet('class', newClasses.join(' ').trim());
     }
+
     if (token.children) {
-      parseTokens(token.children)
+      setTokenClasses(token.children, mapping);
     }
-  })
+  });
 }
 
-
-function parseState(state) {
-  parseTokens(state.tokens)
-}
-
-function markdownitTagToClass(md, _mapping) {
-  mapping = _mapping || {}
-  md.core.ruler.push('markdownit-tag-to-class', parseState)
-}
-
-module.exports = markdownitTagToClass
+module.exports = function markdownitTagToClass(md, mapping = {}) {
+  md.core.ruler.push('markdownit-tag-to-class', (state) => {
+    setTokenClasses(state.tokens, mapping);
+  });
+};

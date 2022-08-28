@@ -1,79 +1,70 @@
-const MarkdownIt = require('markdown-it')
-const MarkdownItClass = require('./index.js')
-const attrs = require('markdown-it-attrs')
+const MarkdownIt = require('markdown-it');
+const MarkdownItClass = require('./index.js');
+const attrs = require('markdown-it-attrs');
 
 describe('markdown-it-class', () => {
-  it('adds a class to corresponding tags', () => {
-    const mapping = {
-        h1: 'title',
-        h2: 'subtitle'
-      },
-      mdtxt = '# Hello\n## World'
-    htmltxt =
+  it('can add single class to tags', () => {
+    const md = new MarkdownIt();
+    md.use(MarkdownItClass, {
+      h1: 'title',
+      h2: 'subtitle',
+    });
+
+    expect(md.render('# Hello\n## World').trim()).toBe(
       '<h1 class="title">Hello</h1>\n<h2 class="subtitle">World</h2>'
+    );
+  });
 
-    const md = new MarkdownIt()
-    md.use(MarkdownItClass, mapping)
+  it('can add multiple classes to tags', () => {
+    const md = new MarkdownIt();
+    md.use(MarkdownItClass, {
+      h1: ['title', 'is-4'],
+      h2: ['subtitle', 'is-6'],
+    });
 
-    expect(md.render(mdtxt).trim()).toBe(htmltxt)
-  })
-
-  it('adds classes to corresponding tags', () => {
-    const mapping = {
-        h1: ['title', 'is-4'],
-        h2: ['subtitle', 'is-6']
-      },
-      mdtxt = '# Hello\n## World'
-    htmltxt =
+    expect(md.render('# Hello\n## World').trim()).toBe(
       '<h1 class="title is-4">Hello</h1>\n<h2 class="subtitle is-6">World</h2>'
-
-    const md = new MarkdownIt()
-    md.use(MarkdownItClass, mapping)
-
-    expect(md.render(mdtxt).trim()).toBe(htmltxt)
-  })
+    );
+  });
 
   it('adds classes to em tags', () => {
-    const mapping = {
-        em: 'tag',
-      },
-      mdtxt = '# There are three buttons, *red* *green* and *blue*.'
-    htmltxt =
+    const md = new MarkdownIt();
+    md.use(MarkdownItClass, {
+      em: 'tag',
+    });
+
+    expect(
+      md.render('# There are three buttons, *red* *green* and *blue*.').trim()
+    ).toBe(
       '<h1>There are three buttons, <em class="tag">red</em> <em class="tag">green</em> and <em class="tag">blue</em>.</h1>'
+    );
+  });
 
-    const md = new MarkdownIt()
-    md.use(MarkdownItClass, mapping)
-
-    expect(md.render(mdtxt).trim()).toBe(htmltxt)
-  })
-  
   it('adds classes to img tags', () => {
-    const mapping = {
-        img: 'tag',
-      },
-      mdtxt = '![alt text](http://placehold.it/720x480.jpg)'
-    htmltxt =
+    const md = new MarkdownIt();
+    md.use(MarkdownItClass, {
+      img: 'tag',
+    });
+
+    expect(
+      md.render('![alt text](http://placehold.it/720x480.jpg)').trim()
+    ).toBe(
       '<p><img src="http://placehold.it/720x480.jpg" alt="alt text" class="tag"></p>'
-
-    const md = new MarkdownIt()
-    md.use(MarkdownItClass, mapping)
-
-    expect(md.render(mdtxt).trim()).toBe(htmltxt)
-  })
+    );
+  });
 
   it('works with markdown-it-attrs', () => {
-    const mapping = {
-        h1: ['is-4', 'is-black'],
-        h2: 'is-6'
-      },
-      mdtxt = '# Hello {.title}\n## World {.subtitle .is-dark}'
-    htmltxt =
+    const md = new MarkdownIt();
+    md.use(MarkdownItClass, {
+      h1: ['is-4', 'is-black'],
+      h2: 'is-6',
+    });
+    md.use(attrs);
+
+    expect(
+      md.render('# Hello {.title}\n## World {.subtitle .is-dark}').trim()
+    ).toBe(
       '<h1 class="title is-4 is-black">Hello</h1>\n<h2 class="subtitle is-dark is-6">World</h2>'
-
-    const md = new MarkdownIt()
-    md.use(MarkdownItClass, mapping)
-    md.use(attrs)
-
-    expect(md.render(mdtxt).trim()).toBe(htmltxt)
-  })
-})
+    );
+  });
+});

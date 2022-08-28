@@ -1,46 +1,48 @@
-markdown-it-class
-=================
+# markdown-it-class
 
-This is a plugin for the [markdown-it](https://github.com/markdown-it/markdown-it) markdown parser.
-This plugin add class attributes to html elements.
+> Plugin for [markdown-it](https://github.com/markdown-it/markdown-it) to allow adding classes to HTML tags.
 
-Install
----
+## Install
 
+You can install it using yarn or npm
+
+```shell
+npm install --save-dev markdown-it-class
 ```
-npm install @toycode/markdown-it-class --save-dev
-```
 
-Although it will work with "yarn", I have not tried it.
+## Usage
 
+All you have to do is register the plugin and pass the tag to class mapping.
 
-Use
----
-
-### Add title class to h1 element
-
-```
+```javascript
 const MarkdownIt = require('markdown-it')
-const markdownItClass = require('@toycode/markdown-it-class')
+const markdownItClass = require('markdown-it-class')
 
-const mdText = '# Hello'
-const mapping = { h1: 'title' }
-const md = MarkdownIt().use(markdownItClass, mapping)
-console.log(md.render(mdText))
-// <h1 class="title">Hello</h1>
+// Setup the markdown renderer
+const md = MarkdownIt()
+  // Register the plugin and pass a tag to class mapping
+  .use(markdownItClass, {
+    h1: ['text-2xl', 'font-bold', 'mb-3', 'text-blue-700'],
+    p: ['text-md'],
+  });
+
+const markdownString = fs.readFileSync('post.md', 'utf-8');
+const html = md.render(markdownString);
+
+// HTML with classes assigned to the tags
+console.log(html);
 ```
 
-### Add more than one classes
+## Credits
 
-```js
-const MarkdownIt = require('markdown-it')
-const markdownItClass = require('@toycode/markdown-it-class')
+This package is a fork of [HiroshiOkada/markdown-it-class](https://github.com/HiroshiOkada/markdown-it-class) with the support for additional tags and updated dependencies.
 
-const mdText = '# Hello\n## *Markdown* world'
-const mapping = { h1: ['title', 'is-4'], h2: 'subtitle', em: 'tag' }
-const md = MarkdownIt().use(markdownItClass, mapping)
-console.log(md.render(mdText))
-// <h1 class="title is-4">Hello</h1>
-// <h2 class="subtitle"><em class="tag">Markdown</em> world</h2>
+## Contributions
 
-```
+Feel free to submit pull requests, create issues or spread the word.
+
+## License
+
+MIT &copy; [Kamran Ahmed](https://twitter.com/kamranahmedse)
+
+
